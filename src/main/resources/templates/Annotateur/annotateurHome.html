@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="content">
+    <!-- Centered Title -->
+    <div class="container my-5 text-center">
+        <h1 th:text="'Bienvenue '+ ${nomUser}+' '+${prenomUser}" class="mb-4"></h1>
+
+
+        <!-- Responsive Cards -->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID Tache</th>
+                    <th>Nom du Dataset</th>
+                    <th>Date Limite</th>
+                    <th>% Avancement</th>
+                    <th>Taille</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Exemple avec Thymeleaf -->
+                <tr th:each="tache : ${taches}">
+                    <td th:text="${tache.id}"></td>
+                    <td th:text="${tache.dataset.nomDataset}"></td>
+                    <td th:text="${tache.dateLimit}"></td>
+                    <td th:text="${avancementMap[tache.id] + '%'}"></td>
+                    <td th:text="${tache.coupleTexts.size()}"></td>
+                    <td>
+                        <a th:if="${!tacheStatus[tache.id]}"
+                           th:href="@{'/user/annotate/' + ${tache.id} + '?index=0'}"
+                           onclick="return confirm('Travailler cette tâche ?')"
+                           class="btn btn-primary"
+                           th:classappend="${#dates.format(#dates.createNow(),'yyyy-MM-dd')> tache.dateLimit} ? ' disabled' : ''">
+                            Travailler
+                        </a>
+
+                        <span th:if="${!tacheStatus[tache.id] and #dates.format(#dates.createNow(),'yyyy-MM-dd')> tache.dateLimit}" class="text-danger d-block mt-1">
+                            ⛔ Date limite dépassée
+                        </span>
+
+                        <span th:if="${tacheStatus[tache.id]}" class="text-success">✔️ Tâche terminée</span>
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
+

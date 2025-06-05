@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Modèles NLP - Entraînement & Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <style>
+        #logs {
+            white-space: pre-wrap;
+            background: #f7f7f7;
+            padding: 15px;
+            border: 1px solid #ddd;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+            font-family: monospace;
+        }
+        .ml-2 {
+            margin-left: 0.5rem;
+        }
+    </style>
+    <!-- CSRF token dans les meta tags -->
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+<div class="container my-5">
+    <h1 class="text-center mb-4">Modèles NLP - Entraînement & Test</h1>
+
+    <table class="table table-bordered">
+        <thead class="thead-light">
+        <tr>
+            <th>#</th>
+            <th>Nom du Dataset</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="dataset : ${datasets}">
+            <td th:text="${dataset.id}"></td>
+            <td th:text="${dataset.nomDataset}"></td>
+            <td th:text="${dataset.descriptionDataset}"></td>
+            <td>
+                <button class="btn btn-success" th:attr="onclick=|launchTraining(${dataset.id})|">
+                    Lancer l'entraînement et test
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h3>Logs et Résultats :</h3>
+    <div id="logs">Ici apparaîtront les logs d'entraînement ou de test.</div>
+</div>
+
+<script>
+    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    function launchTraining(datasetId) {
+        document.getElementById('logs').textContent = "Lancement de l'entraînement pour dataset " + datasetId + "...\n";
+        fetch('/admin/model/train/' + datasetId, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                [csrfHeader]: csrfToken
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Erreur HTTP " + response.status);
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('logs').textContent += data;
+            })
+            .catch(error => {
+                document.getElementById('logs').textContent += "\n[ERREUR] " + error.message;
+            });
+    }
+
+</script>
+</body>
+</html>

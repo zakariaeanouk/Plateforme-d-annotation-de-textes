@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <div th:fragment="content">
+            <div class="container my-4">
+
+                <h1 class="mb-4 text-center">Liste des Annotateurs : </h1>
+
+                <div th:if="${password}" class="alert alert-success text-center">
+                    <h5 class="mb-2">Annotateur créé avec succès !</h5>
+                    <p>
+                        <strong>Login :</strong> <span th:text="${email}"></span><br>
+                        <strong>Mot de passe :</strong> <span th:text="${password}"></span>
+                    </p>
+                </div>
+
+                <table class="table table-bordered table-striped text-center align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr th:each="annotateur : ${annotateurs}">
+                            <td th:text="${annotateur.nom}"></td>
+                            <td th:text="${annotateur.prenom}"></td>
+                            <td>
+                                <form th:action="@{'/admin/annotators/delete/' + ${annotateur.id}}" method="post" onsubmit="return confirm('Confirmer la suppression de cet annotateur ?');">
+                                    <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+
+                        <tr th:if="${annotateurs.size() == 0}">
+                            <td colspan="3" class="text-center text-muted">Aucun annotateur trouvé.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-end mb-3">
+                    <a th:href="@{/admin/annotators/add}" class="btn btn-primary">
+                        Ajouter un Annotateur
+                    </a>
+                </div>
+
+                <nav aria-label="Page navigation" >
+                    <ul class="pagination justify-content-center my-5">
+
+                        <!-- Previous Button -->
+                        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                            <a class="page-link" th:href="@{/admin/datasets(page=${currentPage - 1}, size=5)}" th:if="${currentPage > 0}">Previous</a>
+                            <span class="page-link" th:if="${currentPage == 0}">Previous</span>
+                        </li>
+
+                        <!-- Page Number Display -->
+                        <li class="page-item">
+                            <span class="page-link" th:text="'Page ' + ${currentPage + 1} + ' of ' + ${totalPages}"></span>
+                        </li>
+
+                        <!-- Next Button -->
+                        <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                            <a class="page-link" th:href="@{/admin/datasets(page=${currentPage + 1}, size=5)}" th:if="${currentPage < totalPages - 1}">Next</a>
+                            <span class="page-link" th:if="${currentPage == totalPages - 1}">Next</span>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </body>
+</html>

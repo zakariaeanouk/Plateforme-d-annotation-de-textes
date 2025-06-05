@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="content">
+
+    <div class="container my-5">
+        <div class="card">
+            <h1 class="mb-2 text-center card-header">Add Annotator</h1>
+
+            <!-- Form -->
+            <form th:action="@{/admin/annotators/add}" method="post" class="card-body">
+
+                <!-- Annotator Name -->
+                <div class="mb-2">
+                    <label for="nom" class="form-label">Nom</label>
+                    <input type="text" class="form-control" id="nom" name="nom" placeholder="Enter annotator Name" required>
+                    <div class="invalid-feedback">
+                        Please enter a annotator name.
+                    </div>
+                </div>
+
+                <!-- Annotator Prenom -->
+                <div class="mb-2">
+                    <label for="prenom" class="form-label">prenom</label>
+                    <input type="text" class="form-control" id="prenom" name="prenom"  placeholder="Enter annotator prenom" required></input>
+                    <div class="invalid-feedback">
+                        Please enter a prenom.
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success w-100 mt-3">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+</body>
+</html>

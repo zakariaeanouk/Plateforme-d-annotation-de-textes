@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="content">
+
+    <div class="container my-5">
+        <div class="card">
+        <h1 class="mb-2 text-center card-header">Add Dataset</h1>
+
+        <!-- Form -->
+        <form th:action="@{/admin/dataset}" method="post" enctype="multipart/form-data" class="card-body">
+
+            <!-- Dataset Name -->
+            <div class="mb-2">
+                <label for="datasetName" class="form-label">Dataset Name</label>
+                <input type="text" class="form-control" id="datasetName" name="datasetName" placeholder="Enter Dataset Name" required>
+                <div class="invalid-feedback" th:if="${error}">
+                    this field is required
+                </div>
+            </div>
+
+            <!-- Dataset Description -->
+            <div class="mb-2">
+                <label for="datasetDescription" class="form-label">Dataset Description</label>
+                <textarea class="form-control" id="datasetDescription" name="datasetDescription" rows="3" placeholder="Enter Dataset Description" required></textarea>
+                <div class="invalid-feedback" th:if="${error}">
+                    this field is required
+                </div>
+            </div>
+
+
+            <div class="mb-2">
+                <label for="datasetPossibleClasses" class="form-label">Dataset Possible Classes</label>
+                <input type="text" class="form-control" id="datasetPossibleClasses" name="datasetPossibleClasses" placeholder="Enter Possible Dataset Classes" required></input>
+                <div class="invalid-feedback" th:if="${error}">
+                    this field is required
+                </div>
+            </div>
+
+            <div class="mb-2">
+                <label for="datasetFile" class="form-label">Upload Dataset File</label>
+                <input type="file" accept="text/csv" class="form-control" id="datasetFile" name="datasetFile">
+                <div class="invalid-feedback" th:if="${error}">
+                    this field is required
+                </div>
+            </div>
+
+            <div class="mb-2">
+                <label for="dateLimit" class="form-label">chose a limit date</label>
+                <input type="date"  class="form-control" id="dateLimit" name="dateLimit">
+                <div class="invalid-feedback" th:if="${error}">
+                    this field is required
+                </div>
+            </div>
+
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-success w-100 mt-3">Submit</button>
+            </div>
+        </form>
+    </div>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <div th:fragment="content">
+            <!-- Centered Title -->
+            <div class="container my-5 text-center">
+
+                <h2>Description du Dataset</h2>
+                <div th:if="${dataset != null}">
+                    <p><strong>Nom :</strong> <span th:text="${dataset.nomDataset}"></span></p>
+                    <p><strong>Description :</strong></p>
+                    <p th:text="${dataset.descriptionDataset}"></p>
+                </div>
+                <div th:if="${dataset == null}">
+                    <div class="alert alert-danger" th:text="${erreur}"></div>
+                </div>
+                <a href="javascript:history.back()" class="btn btn-link">↩️ Retour</a>
+            </div>
+        </div>
+    </body>
+</html>

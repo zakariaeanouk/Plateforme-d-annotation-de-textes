@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <div th:fragment="content">
+            <!-- Centered Title -->
+            <div class="container my-5 text-center">
+                <h1 class="mb-4">Welcome Admin</h1>
+
+
+                <!-- Responsive Cards -->
+                <div class="row g-4">
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Datasets</h5>
+                                <p class="card-text" th:text="${datasetsNumber}">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Annotators</h5>
+                                <p class="card-text" th:text="${annotatorsNumber}">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Couples de textes -->
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Text Pairs</h5>
+                                <p class="card-text" th:text="${textPairsNumber}">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Annotations terminées -->
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Completed Annotations</h5>
+                                <p class="card-text" th:text="${completedAnnotations}">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
