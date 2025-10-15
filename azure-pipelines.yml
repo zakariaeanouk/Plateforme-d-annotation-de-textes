@@ -1,0 +1,19 @@
+trigger:
+  - main  # déclenche la CI à chaque commit sur main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  # Étape 1 : Checkout du code source
+  - task: Checkout@1
+
+  # Étape 2 : Build Maven (avec le wrapper)
+  - script: ./mvnw clean package
+    displayName: "Build Spring Boot Application"
+
+  # Étape 3 : Publier le JAR comme artefact
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathToPublish: 'target/*.jar'
+      artifactName: 'nlp-app'
