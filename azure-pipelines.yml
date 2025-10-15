@@ -1,19 +1,48 @@
+# azure-pipelines.yml
 trigger:
-  - main  # déclenche la CI à chaque commit sur main
+  branches:
+    include:
+      - main  # change selon ta branche principale
 
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  MAVEN_OPTS: '-Xmx1024m'
+  JAR_FILE: 'target/AnnotationPlatfrom-0.0.1-SNAPSHOT.jar'
+
 steps:
-  # Étape 1 : Checkout du code source
-  - task: Checkout@1
+# 1️⃣ Checkout du code
+- task: Checkout@1
+  displayName: 'Checkout repository'
 
-  # Étape 2 : Build Maven (avec le wrapper)
-  - script: ./mvnw clean package
-    displayName: "Build Spring Boot Application"
+# 2️⃣ Build Maven
+- task: Maven@3
+  displayName: 'Build Maven project'
+  inputs:
+    mavenPomFile: 'pom.xml'
+    goals: 'clean package'
+    options: '-DskipTests'
 
-  # Étape 3 : Publier le JAR comme artefact
-  - task: PublishBuildArtifacts@1
-    inputs:
-      pathToPublish: 'target/*.jar'
-      artifactName: 'nlp-app'
+# 3️⃣ Run tests (optionnel si tu veux tester)
+- task: Maven@3
+  displayName: 'Run Tests'
+  inputs:
+    mavenPomFile: 'pom.xml'
+    goals: 'test'
+
+# 4️⃣ Publish artifact
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish JAR artifact'
+  inputs:
+    pathToPublish: '$(JAR_FILE)'
+    artifactName: 'drop'
+    publishLocation: 'Container'
+
+# 5️⃣ Deploy to Azure App Service
+- task: AzureWebApp@1
+  displayName: 'Deploy to Azure App Service'
+  inputs:
+    azureSubscription: '<Nom_de_ta_connexion>' # configurer dans Azure DevOps
+    appName: '<Nom_de_l_App_Service>'          # nom de ton App Service
+    package: '$(JAR_FILE)'
