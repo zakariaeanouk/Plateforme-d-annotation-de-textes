@@ -22,7 +22,6 @@ steps:
   inputs:
     mavenPomFile: 'pom.xml'
     goals: 'clean package'
-    options: '-DskipTests'
 
 # 3️⃣ Run tests (optionnel si tu veux tester)
 - task: Maven@3
