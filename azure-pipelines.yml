@@ -43,6 +43,6 @@ steps:
 - task: AzureWebApp@1
   displayName: 'Deploy to Azure App Service'
   inputs:
-    azureSubscription: '<Nom_de_ta_connexion>' # configurer dans Azure DevOps
-    appName: '<Nom_de_l_App_Service>'          # nom de ton App Service
+    azureSubscription: 'AzureConnectionAnnotation' # configurer dans Azure DevOps
+    appName: 'annotation-platform-app'          # nom de ton App Service
     package: '$(JAR_FILE)'
