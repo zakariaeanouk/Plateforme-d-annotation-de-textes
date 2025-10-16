@@ -5,7 +5,7 @@ trigger:
       - main  # change selon ta branche principale
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: Default
 
 variables:
   MAVEN_OPTS: '-Xmx1024m'
