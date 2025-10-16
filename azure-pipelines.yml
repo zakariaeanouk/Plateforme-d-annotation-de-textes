@@ -13,7 +13,7 @@ variables:
 
 steps:
 # 1️⃣ Checkout du code
-- task: Checkout@1
+- checkout: self
   displayName: 'Checkout repository'
 
 # 2️⃣ Build Maven
