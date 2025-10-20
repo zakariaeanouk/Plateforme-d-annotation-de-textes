@@ -45,8 +45,4 @@ steps:
     azureSubscription: 'AzureConnectionAnnotation' # nom exact de ta connexion de service
     appName: 'annotation-platform-app'             # nom exact de ton App Service
     package: '$(JAR_FILE)'
-    deployToSlotOrASE: false
-    resourceGroupName: 'cloud.projet'
-    slotName: 'production'
-                      # 👈 force le déploiement sur la slot principale
 
