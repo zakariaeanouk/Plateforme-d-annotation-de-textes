@@ -46,6 +46,7 @@ steps:
     appName: 'annotation-platform-app'             # nom exact de ton App Service
     package: '$(JAR_FILE)'
     deployToSlotOrASE: true
-    ResourceGroupName: 'cloud.projet'              # ⚠️ nom exact de ton resource group
-    SlotName: 'production'                         # 👈 force le déploiement sur la slot principale
+    resourceGroupName: 'cloud.projet'
+    slotName: 'production'
+                      # 👈 force le déploiement sur la slot principale
 
