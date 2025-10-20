@@ -24,7 +24,7 @@ steps:
     goals: 'clean package'
 
 # 3️⃣ Run tests (optionnel si tu veux tester)
-- task: Maven@3
+- task: Maven@4
   displayName: 'Run Tests'
   inputs:
     mavenPomFile: 'pom.xml'
