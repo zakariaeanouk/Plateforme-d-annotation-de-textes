@@ -2,10 +2,10 @@
 trigger:
   branches:
     include:
-      - main  # Déclenche le pipeline quand tu pousses sur main
+      - main  # adapte selon ta branche principale
 
 pool:
-  name: Default  # ou "ubuntu-latest" si tu veux utiliser un agent hébergé Microsoft
+  name: Default
 
 variables:
   MAVEN_OPTS: '-Xmx1024m'
@@ -16,14 +16,21 @@ steps:
 - checkout: self
   displayName: 'Checkout repository'
 
-# 2️⃣ Build Maven (sans exécuter les tests)
+# 2️⃣ Build Maven
 - task: Maven@3
-  displayName: 'Build Maven project (skip tests)'
+  displayName: 'Build Maven project'
   inputs:
     mavenPomFile: 'pom.xml'
-    goals: 'clean package -DskipTests'
+    goals: 'clean package'
 
-# 4️⃣ Publish artifact (optionnel pour archivage)
+# 3️⃣ Run tests (optionnel)
+- task: Maven@4
+  displayName: 'Run Tests'
+  inputs:
+    mavenPomFile: 'pom.xml'
+    goals: 'test'
+
+# 4️⃣ Publish artifact pour Azure Pipelines
 - task: PublishBuildArtifacts@1
   displayName: 'Publish JAR artifact'
   inputs:
@@ -31,18 +38,18 @@ steps:
     artifactName: 'drop'
     publishLocation: 'Container'
 
-# 5️⃣ Copie le JAR à la racine pour le déploiement
+# 5️⃣ Copier le JAR dans le dossier de staging pour le déploiement
 - task: CopyFiles@2
-  displayName: 'Copy JAR to root for deployment'
+  displayName: 'Copy JAR to staging directory for deployment'
   inputs:
     SourceFolder: 'target'
     Contents: 'AnnotationPlatfrom-0.0.1-SNAPSHOT.jar'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-# 6️⃣ Déploiement sur Azure App Service
+# 6️⃣ Déployer sur Azure App Service
 - task: AzureWebApp@1
   displayName: 'Deploy to Azure App Service'
   inputs:
     azureSubscription: 'AzureConnectionAnnotation' # nom exact de ta connexion de service
     appName: 'annotation-platform-app'             # nom exact de ton App Service
-    package: '$(Build.ArtifactStagingDirectory)/drop/AnnotationPlatfrom-0.0.1-SNAPSHOT.jar'
+    package: '$(Build.ArtifactStagingDirectory)/AnnotationPlatfrom-0.0.1-SNAPSHOT.jar'
