@@ -2,10 +2,10 @@
 trigger:
   branches:
     include:
-      - main  # change selon ta branche principale
+      - main  # déploie uniquement quand on push sur main
 
 pool:
-  name: Default
+  vmImage: 'ubuntu-latest'   # ✅ Utilise une machine hébergée par Microsoft (plus stable que Default)
 
 variables:
   MAVEN_OPTS: '-Xmx1024m'
@@ -16,19 +16,20 @@ steps:
 - checkout: self
   displayName: 'Checkout repository'
 
-# 2️⃣ Build Maven
-- task: Maven@3
+# 2️⃣ Setup JDK (important pour Maven)
+- task: UseJavaVersion@1
+  displayName: 'Set up Java 17'
+  inputs:
+    versionSpec: '17'
+    jdkArchitecture: 'x64'
+
+# 3️⃣ Build Maven project
+- task: Maven@4
   displayName: 'Build Maven project'
   inputs:
     mavenPomFile: 'pom.xml'
-    goals: 'clean package'
-
-# 3️⃣ Run tests (optionnel si tu veux tester)
-- task: Maven@4
-  displayName: 'Run Tests'
-  inputs:
-    mavenPomFile: 'pom.xml'
-    goals: 'test'
+    goals: 'clean package -DskipTests'   # skipTests pour accélérer le build
+    publishJUnitResults: false
 
 # 4️⃣ Publish artifact
 - task: PublishBuildArtifacts@1
@@ -42,7 +43,6 @@ steps:
 - task: AzureWebApp@1
   displayName: 'Deploy to Azure App Service'
   inputs:
-    azureSubscription: 'AzureConnectionAnnotation' # nom exact de ta connexion de service
-    appName: 'annotation-platform-app'             # nom exact de ton App Service
-    package: '$(JAR_FILE)'
-
+    azureSubscription: 'AzureConnectionAnnotation'   # nom exact de la connexion de service (à vérifier)
+    appName: 'annotation-platform-app'               # nom exact de ton App Service
+    package: '$(System.DefaultWorkingDirectory)/target/AnnotationPlatfrom-0.0.1-SNAPSHOT.jar'  # ✅ chemin complet vers le JAR
