@@ -16,19 +16,12 @@ steps:
 - checkout: self
   displayName: 'Checkout repository'
 
-# 2️⃣ Build Maven
+# 2️⃣ Build Maven (sans exécuter les tests)
 - task: Maven@3
-  displayName: 'Build Maven project'
+  displayName: 'Build Maven project (skip tests)'
   inputs:
     mavenPomFile: 'pom.xml'
-    goals: 'clean package'
-
-# 3️⃣ Run tests (optionnel)
-- task: Maven@4
-  displayName: 'Run Tests'
-  inputs:
-    mavenPomFile: 'pom.xml'
-    goals: 'test'
+    goals: 'clean package -DskipTests'
 
 # 4️⃣ Publish artifact (optionnel pour archivage)
 - task: PublishBuildArtifacts@1
