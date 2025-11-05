@@ -2,10 +2,10 @@
 trigger:
   branches:
     include:
-      - main  # déploie uniquement quand on push sur main
+      - main  # Déclenche le pipeline quand tu pousses sur main
 
 pool:
-  vmImage: 'ubuntu-latest'   # ✅ Utilise une machine hébergée par Microsoft (plus stable que Default)
+  name: Default  # ou "ubuntu-latest" si tu veux utiliser un agent hébergé Microsoft
 
 variables:
   MAVEN_OPTS: '-Xmx1024m'
@@ -16,22 +16,21 @@ steps:
 - checkout: self
   displayName: 'Checkout repository'
 
-# 2️⃣ Setup JDK (important pour Maven)
-- task: UseJavaVersion@1
-  displayName: 'Set up Java 17'
-  inputs:
-    versionSpec: '17'
-    jdkArchitecture: 'x64'
-
-# 3️⃣ Build Maven project
-- task: Maven@4
+# 2️⃣ Build Maven
+- task: Maven@3
   displayName: 'Build Maven project'
   inputs:
     mavenPomFile: 'pom.xml'
-    goals: 'clean package -DskipTests'   # skipTests pour accélérer le build
-    publishJUnitResults: false
+    goals: 'clean package'
 
-# 4️⃣ Publish artifact
+# 3️⃣ Run tests (optionnel)
+- task: Maven@4
+  displayName: 'Run Tests'
+  inputs:
+    mavenPomFile: 'pom.xml'
+    goals: 'test'
+
+# 4️⃣ Publish artifact (optionnel pour archivage)
 - task: PublishBuildArtifacts@1
   displayName: 'Publish JAR artifact'
   inputs:
@@ -39,10 +38,18 @@ steps:
     artifactName: 'drop'
     publishLocation: 'Container'
 
-# 5️⃣ Deploy to Azure App Service
+# 5️⃣ Copie le JAR à la racine pour le déploiement
+- task: CopyFiles@2
+  displayName: 'Copy JAR to root for deployment'
+  inputs:
+    SourceFolder: 'target'
+    Contents: 'AnnotationPlatfrom-0.0.1-SNAPSHOT.jar'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+# 6️⃣ Déploiement sur Azure App Service
 - task: AzureWebApp@1
   displayName: 'Deploy to Azure App Service'
   inputs:
-    azureSubscription: 'AzureConnectionAnnotation'   # nom exact de la connexion de service (à vérifier)
-    appName: 'annotation-platform-app'               # nom exact de ton App Service
-    package: '$(System.DefaultWorkingDirectory)/target/AnnotationPlatfrom-0.0.1-SNAPSHOT.jar'  # ✅ chemin complet vers le JAR
+    azureSubscription: 'AzureConnectionAnnotation' # nom exact de ta connexion de service
+    appName: 'annotation-platform-app'             # nom exact de ton App Service
+    package: '$(Build.ArtifactStagingDirectory)/AnnotationPlatfrom-0.0.1-SNAPSHOT.jar'
