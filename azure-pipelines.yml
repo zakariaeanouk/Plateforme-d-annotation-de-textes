@@ -50,6 +50,7 @@ steps:
 - task: AzureWebApp@1
   displayName: 'Deploy to Azure App Service'
   inputs:
-    azureSubscription: 'AzureConnectionAnnotation' # nom exact de ta connexion de service
-    appName: 'annotation-platform-app'             # nom exact de ton App Service
-    package: '$(Build.ArtifactStagingDirectory)/AnnotationPlatfrom-0.0.1-SNAPSHOT.jar'
+    azureSubscription: 'AzureConnectionAnnotation'
+    appName: 'annotation-platform-app'
+    package: '$(System.DefaultWorkingDirectory)/target/AnnotationPlatfrom-0.0.1-SNAPSHOT.jar'
+
