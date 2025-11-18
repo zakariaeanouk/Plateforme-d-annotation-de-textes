@@ -23,12 +23,7 @@ steps:
     mavenPomFile: 'pom.xml'
     goals: 'clean package -DskipTests'
 
-# # 3️⃣ Run tests (optionnel)
-# - task: Maven@4
-#   displayName: 'Run Tests'
-#   inputs:
-#     mavenPomFile: 'pom.xml'
-#     goals: 'test'
+
 
 # 4️⃣ Publish artifact pour Azure Pipelines
 - task: PublishBuildArtifacts@1
