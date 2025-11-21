@@ -47,5 +47,5 @@ steps:
   inputs:
     azureSubscription: 'AzureConnectionAnnotation'
     appName: 'annotation-platform-app'
-    package: '$(System.DefaultWorkingDirectory)/AnnotationPlatfrom-0.0.1-SNAPSHOT.jar'
+    package: '$(System.DefaultWorkingDirectory)/target/AnnotationPlatfrom-0.0.1-SNAPSHOT.jar'
 
